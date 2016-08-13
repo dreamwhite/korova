@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
 import color
@@ -12,7 +12,7 @@ uRl = results.URL
 uRl = ''.join(uRl)
 uRl = str(uRl)
 print """
-_   __                          
+ _   __                          
 | | / /                          
 | |/ /  ___  _ __ _____   ____ _ 
 |    \ / _ \| '__/ _ \ \ / / _` |
@@ -44,9 +44,7 @@ except ImportError:
     print color.HEADER + 'Install from pip:  sudo pip install socket, python-Wappalyzer' + color.DEFAULT
     separator()
 
-if len(sys.argv) == 1:
-    print color.WARNING + 'Usage: ' + sys.argv[0] + ' <site>' + color.DEFAULT
-elif uRl.startswith('http://'):
+if uRl.startswith('http://'):
     uRl = uRl.replace('http://', '')
 elif uRl.startswith('https://'):
     uRl = uRl.replace('https://', '')
