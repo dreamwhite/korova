@@ -1,3 +1,4 @@
+#used on korova
 GREY = '\033[90m'
 FAIL = '\033[91m'
 OKGREEN = '\033[92m'
