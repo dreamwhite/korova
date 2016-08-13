@@ -53,7 +53,7 @@ def check_wordpress(url):
     
     try:
         code = requests.get('http://' + uRl + '/wp-login.php').status_code
-    except urllib2.HTTPError:
+    except requests.ConnectionError:
         return None
 
     if code == 200:
