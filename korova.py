@@ -1,7 +1,7 @@
 #!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
 
-import color
+import color,os
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument('-v', action = 'store_false', dest = 'verbose', help = 'Enable verbose mode')
@@ -21,7 +21,9 @@ print """
                                  
 """
 def separator():
-    print '#' + '-' * 160 + '#'
+	rows,columns = os.popen('stty size', 'r').read().split()
+	print '#' + '-' * (int(columns)-2) + '#'
+
 programming_languages = ["AsciiDoc","C++","CFML","Dart","Elm","Erlang","Haskell","Java","Lua","node.js","PHP","Python","Ruby","Scala"]
 separator()
 print color.HEADER + 'Site selected: ' + uRl + color.WHITE
@@ -38,10 +40,11 @@ try:
     import requests
     import urllib2
     from Wappalyzer import Wappalyzer, WebPage
+    import pprint
 except ImportError:
     separator()
     print color.FAIL + 'Error while importing main libraries!' + color.DEFAULT
-    print color.HEADER + 'Install from pip:  sudo pip install socket, python-Wappalyzer' + color.DEFAULT
+    print color.HEADER + 'Install from pip:  sudo pip install socket python-Wappalyzer pprint ' + color.DEFAULT
     separator()
 
 if uRl.startswith('http://'):
@@ -76,7 +79,8 @@ def check_drupal(url):
 def check_joomla(url):
     
     try:
-        code = requests.get('http://' + uRl + '/index.php?option=com_users&view=login')
+        code = requests.get('http://' + uRl + '/index.php?option=com_users&view=login').status_code
+	#code=re.findall(r'\d+',str(code))[0]
     except urllib2.HTTPError:
         return None
 
@@ -102,7 +106,8 @@ try:
         if verbose == False:
             print color.HEADER + 'Headers:\n'
             print color.CYAN
-            print json
+	    pp=pprint.PrettyPrinter(indent=3)
+	    pp.pprint(json)
             print color.WHITE
         
         wappalyzer = Wappalyzer.latest()
@@ -131,13 +136,14 @@ try:
                     cms_more = '%s is a Drupal website!' % uRl
                     print color.OKGREEN + cms_more + color.WHITE
                 else:
-                    print (color.FAIL + '%s is not a Drupal site!' + color.WHITE) % uRl
+		    print (color.FAIL + '%s is not a Drupal site!' + color.WHITE) % uRl
                 if check_joomla('http://' + uRl):
                     cms = 'Joomla'
                     cms_more = '%s is a Joomla website!' % uRl
                     print color.OKGREEN + cms_more + color.WHITE
                 else:
                     print (color.FAIL + '%s is not a Joomla site!' + color.WHITE) % uRl
+
             except urllib2.HTTPError:
                 print ' ' + uRl + ' login page does not exist or is forbidden' + color.DEFAULT
 
