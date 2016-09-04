@@ -80,7 +80,6 @@ def check_joomla(url):
     
     try:
         code = requests.get('http://' + uRl + '/index.php?option=com_users&view=login').status_code
-	#code=re.findall(r'\d+',str(code))[0]
     except urllib2.HTTPError:
         return None
 
