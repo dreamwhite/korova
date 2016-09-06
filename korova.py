@@ -79,7 +79,7 @@ def check_drupal(url):
 def check_joomla(url):
     
     try:
-        code = requests.get('http://' + uRl + '/index.php?option=com_users&view=login').status_code
+        code = requests.get('http://' + uRl + '/administrator').status_code
     except urllib2.HTTPError:
         return None
 
